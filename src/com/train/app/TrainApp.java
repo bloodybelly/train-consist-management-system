@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.LinkedList;
 
 public class TrainApp {
 
@@ -33,8 +34,6 @@ public class TrainApp {
 
         if (trainConsist.contains("Sleeper")) {
             System.out.println("\nSleeper coach exists in the train.");
-        } else {
-            System.out.println("\nSleeper coach not found.");
         }
 
         System.out.println("\nFinal Train Consist:");
@@ -44,15 +43,41 @@ public class TrainApp {
 
         Set<Integer> bogieIds = new HashSet<>();
 
-        // Adding bogie IDs (duplicates will be ignored)
         bogieIds.add(101);
         bogieIds.add(102);
         bogieIds.add(103);
-        bogieIds.add(101); // duplicate
-        bogieIds.add(102); // duplicate
+        bogieIds.add(101);
+        bogieIds.add(102);
 
         System.out.println("\nUnique Bogie IDs:");
         System.out.println(bogieIds);
+
+        // ================= UC4 =================
+
+        LinkedList<String> linkedTrain = new LinkedList<>();
+
+        // Add bogies
+        linkedTrain.add("Engine");
+        linkedTrain.add("Sleeper");
+        linkedTrain.add("AC");
+        linkedTrain.add("Cargo");
+        linkedTrain.add("Guard");
+
+        System.out.println("\nInitial LinkedList Train:");
+        System.out.println(linkedTrain);
+
+        // Insert Pantry Car at position 2
+        linkedTrain.add(2, "Pantry Car");
+
+        System.out.println("\nAfter Inserting Pantry Car at position 2:");
+        System.out.println(linkedTrain);
+
+        // Remove first and last
+        linkedTrain.removeFirst();
+        linkedTrain.removeLast();
+
+        System.out.println("\nAfter Removing First and Last Bogie:");
+        System.out.println(linkedTrain);
 
         System.out.println("\nSystem ready for further operations.");
     }
