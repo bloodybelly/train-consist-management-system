@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.LinkedList;
 import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrainApp {
 
@@ -85,12 +87,24 @@ public class TrainApp {
         formation.add("Sleeper");
         formation.add("Cargo");
         formation.add("Guard");
-
-        // duplicate attempt
         formation.add("Sleeper");
 
         System.out.println("\nTrain Formation (LinkedHashSet):");
         System.out.println(formation);
+
+        // ================= UC6 =================
+
+        HashMap<String, Integer> bogieCapacity = new HashMap<>();
+
+        bogieCapacity.put("Sleeper", 72);
+        bogieCapacity.put("AC Chair", 50);
+        bogieCapacity.put("First Class", 30);
+
+        System.out.println("\nBogie Capacity Mapping:");
+
+        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
 
         System.out.println("\nSystem ready for further operations.");
     }
