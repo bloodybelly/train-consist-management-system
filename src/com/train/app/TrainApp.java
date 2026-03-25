@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.LinkedList;
+import java.util.LinkedHashSet;
 
 public class TrainApp {
 
@@ -56,7 +57,6 @@ public class TrainApp {
 
         LinkedList<String> linkedTrain = new LinkedList<>();
 
-        // Add bogies
         linkedTrain.add("Engine");
         linkedTrain.add("Sleeper");
         linkedTrain.add("AC");
@@ -66,18 +66,31 @@ public class TrainApp {
         System.out.println("\nInitial LinkedList Train:");
         System.out.println(linkedTrain);
 
-        // Insert Pantry Car at position 2
         linkedTrain.add(2, "Pantry Car");
 
         System.out.println("\nAfter Inserting Pantry Car at position 2:");
         System.out.println(linkedTrain);
 
-        // Remove first and last
         linkedTrain.removeFirst();
         linkedTrain.removeLast();
 
         System.out.println("\nAfter Removing First and Last Bogie:");
         System.out.println(linkedTrain);
+
+        // ================= UC5 =================
+
+        LinkedHashSet<String> formation = new LinkedHashSet<>();
+
+        formation.add("Engine");
+        formation.add("Sleeper");
+        formation.add("Cargo");
+        formation.add("Guard");
+
+        // duplicate attempt
+        formation.add("Sleeper");
+
+        System.out.println("\nTrain Formation (LinkedHashSet):");
+        System.out.println(formation);
 
         System.out.println("\nSystem ready for further operations.");
     }
