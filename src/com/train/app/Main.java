@@ -21,7 +21,7 @@ public class Main {
         yard.enqueue(new Coach(201, "Sleeper", 72));
         yard.enqueue(new Coach(202, "AC", 50));
         yard.enqueue(new Coach(203, "General", 100));
-        yard.enqueue(new Coach(204, "AC", 60)); // extra for grouping demo
+        yard.enqueue(new Coach(204, "AC", 60));
 
         System.out.println("Yard Queue:");
         yard.displayQueue();
@@ -34,13 +34,14 @@ public class Main {
         System.out.println("\nTrain after attaching from yard:");
         train.display();
 
+        // Convert LinkedList → List
+        List<Coach> coachList = train.toList();
+
         // ===============================
         // UC7: SORT
         // ===============================
 
         System.out.println("\n--- UC7: Sort Coaches ---");
-
-        List<Coach> coachList = train.toList();
 
         coachList.sort(Comparator.comparingInt(Coach::getCapacity));
 
@@ -63,21 +64,31 @@ public class Main {
         }
 
         // ===============================
-        // 🚀 UC9: GROUPING BY TYPE
+        // UC9: GROUPING
         // ===============================
 
-        System.out.println("\n--- UC9: Group Coaches by Type ---");
+        System.out.println("\n--- UC9: Group by Type ---");
 
         Map<String, List<Coach>> grouped = coachList.stream()
                 .collect(Collectors.groupingBy(Coach::getType));
 
-        // Display grouped result
         for (Map.Entry<String, List<Coach>> entry : grouped.entrySet()) {
             System.out.println("\nType: " + entry.getKey());
-
             for (Coach c : entry.getValue()) {
                 System.out.println(c);
             }
         }
+
+        // ===============================
+        // 🚀 UC10: TOTAL CAPACITY (REDUCE)
+        // ===============================
+
+        System.out.println("\n--- UC10: Total Seating Capacity ---");
+
+        int totalCapacity = coachList.stream()
+                .map(Coach::getCapacity)       // extract capacity
+                .reduce(0, Integer::sum);      // sum all values
+
+        System.out.println("Total Seating Capacity: " + totalCapacity);
     }
 }
