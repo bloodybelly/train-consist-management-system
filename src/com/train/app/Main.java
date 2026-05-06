@@ -18,7 +18,7 @@ public class Main {
                 CoachQueue yard = new CoachQueue();
 
                 // ===============================
-                // INITIAL SETUP (UC14 handled)
+                // INITIAL SETUP
                 // ===============================
                 try {
                         yard.enqueue(new Coach(201, "Sleeper", 72, "Rectangular"));
@@ -29,61 +29,43 @@ public class Main {
                         System.out.println("Capacity Error: " + e.getMessage());
                 }
 
-                System.out.println("Yard Queue:");
-                yard.displayQueue();
-
                 train.addCoach(yard.dequeue());
                 train.addCoach(yard.dequeue());
                 train.addCoach(yard.dequeue());
                 train.addCoach(yard.dequeue());
-
-                System.out.println("\nTrain:");
-                train.display();
 
                 List<Coach> coachList = train.toList();
 
                 // ===============================
                 // UC7: SORT
                 // ===============================
-                System.out.println("\n--- UC7: Sorting ---");
                 coachList.sort(Comparator.comparingInt(Coach::getCapacity));
-                coachList.forEach(System.out::println);
 
                 // ===============================
                 // UC8: FILTER
                 // ===============================
-                System.out.println("\n--- UC8: Filter Capacity > 60 ---");
                 List<Coach> filtered = coachList.stream()
                         .filter(c -> c.getCapacity() > 60)
                         .collect(Collectors.toList());
-                filtered.forEach(System.out::println);
 
                 // ===============================
                 // UC9: GROUPING
                 // ===============================
-                System.out.println("\n--- UC9: Group by Type ---");
                 Map<String, List<Coach>> grouped =
                         coachList.stream().collect(Collectors.groupingBy(Coach::getType));
-
-                grouped.forEach((type, list) -> {
-                        System.out.println("\nType: " + type);
-                        list.forEach(System.out::println);
-                });
 
                 // ===============================
                 // UC10: REDUCE
                 // ===============================
-                System.out.println("\n--- UC10: Total Capacity ---");
                 int total = coachList.stream()
                         .map(Coach::getCapacity)
                         .reduce(0, Integer::sum);
+
                 System.out.println("Total Capacity: " + total);
 
                 // ===============================
                 // UC11: REGEX
                 // ===============================
-                System.out.println("\n--- UC11: Regex Validation ---");
-
                 Scanner sc = new Scanner(System.in);
 
                 Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
@@ -106,8 +88,6 @@ public class Main {
                 // ===============================
                 // UC13: PERFORMANCE
                 // ===============================
-                System.out.println("\n--- UC13: Performance ---");
-
                 List<Coach> bigList = new ArrayList<>();
                 for (int i = 0; i < 100000; i++) {
                         try {
@@ -116,16 +96,13 @@ public class Main {
                 }
 
                 long startLoop = System.nanoTime();
-                List<Coach> loopResult = new ArrayList<>();
                 for (Coach c : bigList) {
-                        if (c.getCapacity() > 60) loopResult.add(c);
+                        if (c.getCapacity() > 60) {}
                 }
                 long loopTime = System.nanoTime() - startLoop;
 
                 long startStream = System.nanoTime();
-                List<Coach> streamResult = bigList.stream()
-                        .filter(c -> c.getCapacity() > 60)
-                        .collect(Collectors.toList());
+                bigList.stream().filter(c -> c.getCapacity() > 60).collect(Collectors.toList());
                 long streamTime = System.nanoTime() - startStream;
 
                 System.out.println("Loop Time: " + loopTime);
@@ -134,14 +111,12 @@ public class Main {
                 // ===============================
                 // UC15: RUNTIME EXCEPTION
                 // ===============================
-                System.out.println("\n--- UC15: Cargo Safety ---");
-
                 try {
                         Coach c1 = new Coach(301, "Goods", 80, "Rectangular");
                         Coach c2 = new Coach(302, "Goods", 90, "Cylindrical");
 
-                        c2.assignCargo("Petroleum"); // safe
-                        c1.assignCargo("Petroleum"); // unsafe
+                        c2.assignCargo("Petroleum");
+                        c1.assignCargo("Petroleum");
 
                 } catch (InvalidCapacityException e) {
                         System.out.println(e.getMessage());
@@ -154,12 +129,7 @@ public class Main {
                 // ===============================
                 // UC16: BUBBLE SORT
                 // ===============================
-                System.out.println("\n--- UC16: Bubble Sort ---");
-
                 int[] arr = {72, 50, 100, 60, 40};
-
-                System.out.print("Before: ");
-                for (int x : arr) System.out.print(x + " ");
 
                 for (int i = 0; i < arr.length - 1; i++) {
                         for (int j = 0; j < arr.length - i - 1; j++) {
@@ -171,24 +141,38 @@ public class Main {
                         }
                 }
 
-                System.out.print("\nAfter: ");
-                for (int x : arr) System.out.print(x + " ");
-
                 // ===============================
-                // 🚀 UC17: ARRAYS.SORT
+                // UC17: ARRAYS.SORT
                 // ===============================
-                System.out.println("\n\n--- UC17: Arrays.sort() ---");
-
                 String[] bogieTypes = {"Sleeper", "AC", "General", "FirstClass", "ChairCar"};
+                Arrays.sort(bogieTypes);
 
-                System.out.println("Before Sorting:");
-                System.out.println(Arrays.toString(bogieTypes));
+                // ===============================
+                // 🚀 UC18: LINEAR SEARCH
+                // ===============================
+                System.out.println("\n--- UC18: Linear Search ---");
 
-                Arrays.sort(bogieTypes);  // Built-in sorting
+                String[] bogieIDs = {"BG101", "BG202", "BG303", "BG404", "BG505"};
 
-                System.out.println("After Sorting (Alphabetical):");
-                System.out.println(Arrays.toString(bogieTypes));
+                System.out.print("Enter Bogie ID to search: ");
+                String key = sc.nextLine();
+
+                boolean found = false;
+
+                for (String id : bogieIDs) {
+                        if (id.equals(key)) {
+                                found = true;
+                                break; // early termination
+                        }
+                }
+
+                if (found) {
+                        System.out.println("Bogie ID found ✅");
+                } else {
+                        System.out.println("Bogie ID not found ❌");
+                }
 
                 System.out.println("\nProgram completed successfully.");
+                sc.close();
         }
 }
