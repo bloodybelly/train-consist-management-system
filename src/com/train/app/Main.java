@@ -174,6 +174,21 @@ public class Main {
                 System.out.print("\nAfter: ");
                 for (int x : arr) System.out.print(x + " ");
 
-                System.out.println("\n\nProgram completed successfully.");
+                // ===============================
+                // 🚀 UC17: ARRAYS.SORT
+                // ===============================
+                System.out.println("\n\n--- UC17: Arrays.sort() ---");
+
+                String[] bogieTypes = {"Sleeper", "AC", "General", "FirstClass", "ChairCar"};
+
+                System.out.println("Before Sorting:");
+                System.out.println(Arrays.toString(bogieTypes));
+
+                Arrays.sort(bogieTypes);  // Built-in sorting
+
+                System.out.println("After Sorting (Alphabetical):");
+                System.out.println(Arrays.toString(bogieTypes));
+
+                System.out.println("\nProgram completed successfully.");
         }
 }
