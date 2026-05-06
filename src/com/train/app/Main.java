@@ -1,42 +1,40 @@
 package com.train.app;
 
 import com.train.model.Coach;
-import com.train.ds.CoachLinkedList;
-import com.train.ds.CoachQueue;
 import com.train.exception.InvalidCapacityException;
-
-import java.util.*;
+import com.train.exception.CargoSafetyException;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        CoachLinkedList train = new CoachLinkedList();
-        CoachQueue yard = new CoachQueue();
-
-        System.out.println("\n--- UC14: Capacity Validation ---");
+        System.out.println("\n--- UC15: Cargo Safety Handling ---");
 
         try {
-            // VALID coaches
-            yard.enqueue(new Coach(201, "Sleeper", 72));
-            yard.enqueue(new Coach(202, "AC", 50));
+            // Create coaches
+            Coach c1 = new Coach(301, "Goods", 80, "Rectangular");
+            Coach c2 = new Coach(302, "Goods", 90, "Cylindrical");
 
-            // ❌ INVALID coach (will throw exception)
-            yard.enqueue(new Coach(203, "General", -10));
+            // Safe assignment
+            c2.assignCargo("Petroleum");
+
+            // ❌ Unsafe assignment (will throw exception)
+            c1.assignCargo("Petroleum");
+
+        } catch (CargoSafetyException e) {
+
+            System.out.println("Error: " + e.getMessage());
 
         } catch (InvalidCapacityException e) {
-            System.out.println("Error: " + e.getMessage());
+
+            System.out.println("Capacity Error: " + e.getMessage());
+
+        } finally {
+
+            System.out.println("Operation completed (logged safely).");
         }
 
-        // Continue program safely
-        System.out.println("\nRemaining valid coaches in yard:");
-        yard.displayQueue();
-
-        // Add to train
-        train.addCoach(yard.dequeue());
-        train.addCoach(yard.dequeue());
-
-        System.out.println("\nTrain:");
-        train.display();
+        // Program continues
+        System.out.println("\nApplication still running...");
     }
 }
