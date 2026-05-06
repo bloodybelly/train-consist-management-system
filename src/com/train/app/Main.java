@@ -6,6 +6,7 @@ import com.train.ds.CoachQueue;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.regex.*;
 
 public class Main {
 
@@ -40,55 +41,66 @@ public class Main {
         // ===============================
         // UC7: SORT
         // ===============================
-
-        System.out.println("\n--- UC7: Sort Coaches ---");
-
         coachList.sort(Comparator.comparingInt(Coach::getCapacity));
-
-        for (Coach c : coachList) {
-            System.out.println(c);
-        }
 
         // ===============================
         // UC8: FILTER
         // ===============================
-
-        System.out.println("\n--- UC8: Filter Capacity > 60 ---");
-
         List<Coach> filtered = coachList.stream()
                 .filter(c -> c.getCapacity() > 60)
                 .collect(Collectors.toList());
 
-        for (Coach c : filtered) {
-            System.out.println(c);
-        }
-
         // ===============================
         // UC9: GROUPING
         // ===============================
-
-        System.out.println("\n--- UC9: Group by Type ---");
-
         Map<String, List<Coach>> grouped = coachList.stream()
                 .collect(Collectors.groupingBy(Coach::getType));
 
-        for (Map.Entry<String, List<Coach>> entry : grouped.entrySet()) {
-            System.out.println("\nType: " + entry.getKey());
-            for (Coach c : entry.getValue()) {
-                System.out.println(c);
-            }
+        // ===============================
+        // UC10: REDUCE
+        // ===============================
+        int totalCapacity = coachList.stream()
+                .map(Coach::getCapacity)
+                .reduce(0, Integer::sum);
+
+        System.out.println("\nTotal Capacity: " + totalCapacity);
+
+        // ===============================
+        // 🚀 UC11: REGEX VALIDATION
+        // ===============================
+
+        Scanner sc = new Scanner(System.in);
+
+        // Patterns
+        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
+        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
+
+        // Input
+        System.out.println("\n--- UC11: Regex Validation ---");
+
+        System.out.print("Enter Train ID (format TRN-1234): ");
+        String trainId = sc.nextLine();
+
+        System.out.print("Enter Cargo Code (format PET-AB): ");
+        String cargoCode = sc.nextLine();
+
+        // Matching
+        Matcher trainMatcher = trainPattern.matcher(trainId);
+        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
+
+        // Validation
+        if (trainMatcher.matches()) {
+            System.out.println("Valid Train ID ✅");
+        } else {
+            System.out.println("Invalid Train ID ❌");
         }
 
-        // ===============================
-        // 🚀 UC10: TOTAL CAPACITY (REDUCE)
-        // ===============================
+        if (cargoMatcher.matches()) {
+            System.out.println("Valid Cargo Code ✅");
+        } else {
+            System.out.println("Invalid Cargo Code ❌");
+        }
 
-        System.out.println("\n--- UC10: Total Seating Capacity ---");
-
-        int totalCapacity = coachList.stream()
-                .map(Coach::getCapacity)       // extract capacity
-                .reduce(0, Integer::sum);      // sum all values
-
-        System.out.println("Total Seating Capacity: " + totalCapacity);
+        sc.close();
     }
 }
