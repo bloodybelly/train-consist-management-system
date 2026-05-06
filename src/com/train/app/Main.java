@@ -5,6 +5,7 @@ import com.train.ds.CoachLinkedList;
 import com.train.ds.CoachQueue;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -32,32 +33,45 @@ public class Main {
         train.display();
 
         // ===============================
-        // 🚀 UC7: SORT TRAIN COACHES
+        // 🚀 UC7: SORT COACHES
         // ===============================
 
-        System.out.println("\n--- UC7: Sort Existing Train Coaches ---");
+        System.out.println("\n--- UC7: Sort Coaches by Capacity ---");
 
-        // Step 1: Convert LinkedList → List
         List<Coach> coachList = train.toList();
 
-        // Step 2: Before sorting
         System.out.println("\nBefore Sorting:");
         for (Coach c : coachList) {
             System.out.println(c);
         }
 
-        // Step 3: Sort using Comparator (ASC)
         coachList.sort(Comparator.comparingInt(Coach::getCapacity));
 
-        System.out.println("\nAfter Sorting (Ascending Capacity):");
+        System.out.println("\nAfter Sorting (Ascending):");
         for (Coach c : coachList) {
             System.out.println(c);
         }
 
-        // Step 4: Sort DESC
-        coachList.sort(Comparator.comparingInt(Coach::getCapacity).reversed());
+        // ===============================
+        // 🚀 UC8: FILTER USING STREAM API
+        // ===============================
 
-        System.out.println("\nAfter Sorting (Descending Capacity):");
+        System.out.println("\n--- UC8: Filter Coaches with Capacity > 60 ---");
+
+        List<Coach> filteredList = coachList.stream()
+                .filter(c -> c.getCapacity() > 60)   // 🔥 core logic
+                .collect(Collectors.toList());
+
+        System.out.println("\nFiltered Coaches:");
+        for (Coach c : filteredList) {
+            System.out.println(c);
+        }
+
+        // ===============================
+        // OPTIONAL: SHOW ORIGINAL LIST UNAFFECTED
+        // ===============================
+
+        System.out.println("\nOriginal List (Unchanged):");
         for (Coach c : coachList) {
             System.out.println(c);
         }
