@@ -1,40 +1,77 @@
-package com.train.app;
+// ===============================
+// 🚀 UC16: BUBBLE SORT (NO LIBRARY)
+// ===============================
 
-import com.train.model.Coach;
-import com.train.exception.InvalidCapacityException;
-import com.train.exception.CargoSafetyException;
+System.out.println("\n--- UC16: Bubble Sort on Capacities ---");
 
-public class Main {
+// Step 1: Create array of capacities
+int[] capacities = {72, 50, 100, 60, 40};
 
-    public static void main(String[] args) {
-
-        System.out.println("\n--- UC15: Cargo Safety Handling ---");
-
-        try {
-            // Create coaches
-            Coach c1 = new Coach(301, "Goods", 80, "Rectangular");
-            Coach c2 = new Coach(302, "Goods", 90, "Cylindrical");
-
-            // Safe assignment
-            c2.assignCargo("Petroleum");
-
-            // ❌ Unsafe assignment (will throw exception)
-            c1.assignCargo("Petroleum");
-
-        } catch (CargoSafetyException e) {
-
-            System.out.println("Error: " + e.getMessage());
-
-        } catch (InvalidCapacityException e) {
-
-            System.out.println("Capacity Error: " + e.getMessage());
-
-        } finally {
-
-            System.out.println("Operation completed (logged safely).");
-        }
-
-        // Program continues
-        System.out.println("\nApplication still running...");
-    }
+// Display before sorting
+System.out.println("Before Sorting:");
+for (int c : capacities) {
+        System.out.print(c + " ");
 }
+
+// Step 2: Bubble Sort
+int n = capacities.length;
+
+for (int i = 0; i < n - 1; i++) {
+
+        for (int j = 0; j < n - i - 1; j++) {
+
+        // Compare adjacent elements
+        if (capacities[j] > capacities[j + 1]) {
+
+// Swap
+int temp = capacities[j];
+capacities[j] = capacities[j + 1];
+capacities[j + 1] = temp;
+        }
+                }
+                }
+
+// Step 3: Display sorted array
+                System.out.println("\nAfter Sorting:");
+for (int c : capacities) {
+        System.out.print(c + " ");
+}
+        System.out.println();// ===============================
+// 🚀 UC16: BUBBLE SORT (NO LIBRARY)
+// ===============================
+
+System.out.println("\n--- UC16: Bubble Sort on Capacities ---");
+
+// Step 1: Create array of capacities
+int[] capacities = {72, 50, 100, 60, 40};
+
+// Display before sorting
+System.out.println("Before Sorting:");
+for (int c : capacities) {
+        System.out.print(c + " ");
+}
+
+// Step 2: Bubble Sort
+int n = capacities.length;
+
+for (int i = 0; i < n - 1; i++) {
+
+        for (int j = 0; j < n - i - 1; j++) {
+
+        // Compare adjacent elements
+        if (capacities[j] > capacities[j + 1]) {
+
+// Swap
+int temp = capacities[j];
+capacities[j] = capacities[j + 1];
+capacities[j + 1] = temp;
+        }
+                }
+                }
+
+// Step 3: Display sorted array
+                System.out.println("\nAfter Sorting:");
+for (int c : capacities) {
+        System.out.print(c + " ");
+}
+        System.out.println();
