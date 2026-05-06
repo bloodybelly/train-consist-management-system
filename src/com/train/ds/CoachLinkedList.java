@@ -1,144 +1,116 @@
 package com.train.ds;
 
 import com.train.model.Coach;
-import com.train.util.Action;
-import java.util.Stack;
+import java.util.*;
 
 public class CoachLinkedList {
 
-    private CoachNode head;
-    private CoachNode tail;
+    private Coach head;
 
-    private Stack<Action> history = new Stack<>();
+    // Stack for undo (stores removed coaches)
+    private Stack<Coach> undoStack = new Stack<>();
 
-    // ✅ Check if coach already exists
-    public boolean containsCoach(int coachId) {
-        CoachNode temp = head;
-
-        while (temp != null) {
-            if (temp.data.getCoachId() == coachId) {
-                return true;
+    // ===============================
+    // ADD COACH
+    // ===============================
+    public void addCoach(Coach coach) {
+        if (head == null) {
+            head = coach;
+        } else {
+            Coach temp = head;
+            while (temp.next != null) {
+                temp = temp.next;
             }
-            temp = temp.next;
+            temp.next = coach;
         }
-        return false;
     }
 
-    // ✅ Add coach (with validation + history)
-    public void addCoach(Coach coach) {
-
-        if (containsCoach(coach.getCoachId())) {
-            System.out.println("Duplicate coach not allowed: " + coach.getCoachId());
+    // ===============================
+    // REMOVE COACH
+    // ===============================
+    public void removeCoach(int coachId) {
+        if (head == null) {
+            System.out.println("Train is empty!");
             return;
         }
 
-        addCoachInternal(coach);
-        history.push(new Action("ADD", coach));
-
-        System.out.println("Coach added: " + coach.getCoachId());
-    }
-
-    // ✅ Internal add (no history)
-    private void addCoachInternal(Coach coach) {
-        CoachNode newNode = new CoachNode(coach);
-
-        if (head == null) {
-            head = tail = newNode;
-        } else {
-            tail.next = newNode;
-            newNode.prev = tail;
-            tail = newNode;
+        // If head is to be removed
+        if (head.getId() == coachId) {
+            undoStack.push(head);
+            head = head.next;
+            System.out.println("Coach removed!");
+            return;
         }
+
+        Coach current = head;
+        Coach prev = null;
+
+        while (current != null && current.getId() != coachId) {
+            prev = current;
+            current = current.next;
+        }
+
+        if (current == null) {
+            System.out.println("Coach not found!");
+            return;
+        }
+
+        undoStack.push(current);
+        prev.next = current.next;
+
+        System.out.println("Coach removed!");
     }
 
-    // ✅ Display train
+    // ===============================
+    // UNDO REMOVE
+    // ===============================
+    public void undo() {
+        if (undoStack.isEmpty()) {
+            System.out.println("Nothing to undo!");
+            return;
+        }
+
+        Coach coach = undoStack.pop();
+        addCoach(coach);
+
+        System.out.println("Undo successful! Coach restored.");
+    }
+
+    // ===============================
+    // DISPLAY TRAIN
+    // ===============================
     public void display() {
         if (head == null) {
             System.out.println("Train is empty!");
             return;
         }
 
-        CoachNode temp = head;
-
+        Coach temp = head;
         while (temp != null) {
-            System.out.println(temp.data);
+            System.out.println(temp);
             temp = temp.next;
         }
     }
 
-    // ✅ Remove coach (with history)
-    public void removeCoach(int coachId) {
-        CoachNode temp = head;
+    // ===============================
+    // CONVERT TO LIST (UC7 SUPPORT)
+    // ===============================
+    public List<Coach> toList() {
+        List<Coach> list = new ArrayList<>();
+        Coach current = head;
 
-        while (temp != null) {
-
-            if (temp.data.getCoachId() == coachId) {
-
-                history.push(new Action("REMOVE", temp.data));
-                removeCoachInternal(coachId);
-
-                System.out.println("Coach removed: " + coachId);
-                return;
-            }
-
-            temp = temp.next;
+        while (current != null) {
+            list.add(current);
+            current = current.next;
         }
 
-        System.out.println("Coach not found!");
+        return list;
     }
 
-    // ✅ Internal remove (no history)
-    private void removeCoachInternal(int coachId) {
-        CoachNode temp = head;
-
-        while (temp != null) {
-
-            if (temp.data.getCoachId() == coachId) {
-
-                // Only one node
-                if (head == tail) {
-                    head = tail = null;
-                }
-                // Remove head
-                else if (temp == head) {
-                    head = head.next;
-                    if (head != null) head.prev = null;
-                }
-                // Remove tail
-                else if (temp == tail) {
-                    tail = tail.prev;
-                    if (tail != null) tail.next = null;
-                }
-                // Remove middle
-                else {
-                    temp.prev.next = temp.next;
-                    temp.next.prev = temp.prev;
-                }
-                return;
-            }
-
-            temp = temp.next;
-        }
-    }
-
-    // ✅ Undo last operation
-    public void undo() {
-
-        if (history.isEmpty()) {
-            System.out.println("Nothing to undo!");
-            return;
-        }
-
-        Action lastAction = history.pop();
-
-        if (lastAction.type.equals("ADD")) {
-            removeCoachInternal(lastAction.coach.getCoachId());
-            System.out.println("Undo: Add reversed");
-        }
-
-        else if (lastAction.type.equals("REMOVE")) {
-            addCoachInternal(lastAction.coach);
-            System.out.println("Undo: Remove reversed");
-        }
+    // ===============================
+    // GET HEAD (for advanced features)
+    // ===============================
+    public Coach getHead() {
+        return head;
     }
 }

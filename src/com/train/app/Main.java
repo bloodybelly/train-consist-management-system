@@ -4,6 +4,8 @@ import com.train.model.Coach;
 import com.train.ds.CoachLinkedList;
 import com.train.ds.CoachQueue;
 
+import java.util.*;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -11,33 +13,53 @@ public class Main {
         CoachLinkedList train = new CoachLinkedList();
         CoachQueue yard = new CoachQueue();
 
-        // ✅ Add coaches to waiting yard
+        // ===============================
+        // EXISTING FUNCTIONALITY
+        // ===============================
+
         yard.enqueue(new Coach(201, "Sleeper", 72));
         yard.enqueue(new Coach(202, "AC", 50));
         yard.enqueue(new Coach(203, "General", 100));
 
+        System.out.println("Yard Queue:");
         yard.displayQueue();
 
-        // ✅ Attach coaches from yard to train
+        train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
 
         System.out.println("\nTrain after attaching from yard:");
         train.display();
 
-        // ✅ Remove and undo
-        train.removeCoach(201);
+        // ===============================
+        // 🚀 UC7: SORT TRAIN COACHES
+        // ===============================
 
-        System.out.println("\nAfter removal:");
-        train.display();
+        System.out.println("\n--- UC7: Sort Existing Train Coaches ---");
 
-        train.undo();
+        // Step 1: Convert LinkedList → List
+        List<Coach> coachList = train.toList();
 
-        System.out.println("\nAfter undo:");
-        train.display();
+        // Step 2: Before sorting
+        System.out.println("\nBefore Sorting:");
+        for (Coach c : coachList) {
+            System.out.println(c);
+        }
 
-        // Remaining queue
-        System.out.println("\nRemaining in Yard:");
-        yard.displayQueue();
+        // Step 3: Sort using Comparator (ASC)
+        coachList.sort(Comparator.comparingInt(Coach::getCapacity));
+
+        System.out.println("\nAfter Sorting (Ascending Capacity):");
+        for (Coach c : coachList) {
+            System.out.println(c);
+        }
+
+        // Step 4: Sort DESC
+        coachList.sort(Comparator.comparingInt(Coach::getCapacity).reversed());
+
+        System.out.println("\nAfter Sorting (Descending Capacity):");
+        for (Coach c : coachList) {
+            System.out.println(c);
+        }
     }
 }

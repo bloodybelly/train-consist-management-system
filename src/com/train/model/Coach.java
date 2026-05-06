@@ -1,22 +1,27 @@
 package com.train.model;
 
 public class Coach {
-    private int coachId;
-    private String coachType; // Sleeper, AC, General
+
+    private int id;
+    private String type;
     private int capacity;
 
-    public Coach(int coachId, String coachType, int capacity) {
-        this.coachId = coachId;
-        this.coachType = coachType;
+    public Coach next; // for LinkedList
+
+    public Coach(int id, String type, int capacity) {
+        this.id = id;
+        this.type = type;
         this.capacity = capacity;
+        this.next = null;
     }
 
-    public int getCoachId() {
-        return coachId;
+    // Getters (REQUIRED for UC7)
+    public int getId() {
+        return id;
     }
 
-    public String getCoachType() {
-        return coachType;
+    public String getType() {
+        return type;
     }
 
     public int getCapacity() {
@@ -25,8 +30,6 @@ public class Coach {
 
     @Override
     public String toString() {
-        return "Coach ID: " + coachId +
-                ", Type: " + coachType +
-                ", Capacity: " + capacity;
+        return "Coach ID: " + id + ", Type: " + type + ", Capacity: " + capacity;
     }
 }
