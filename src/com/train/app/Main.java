@@ -5,6 +5,7 @@ import com.train.ds.CoachLinkedList;
 import com.train.ds.CoachQueue;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -20,10 +21,12 @@ public class Main {
         yard.enqueue(new Coach(201, "Sleeper", 72));
         yard.enqueue(new Coach(202, "AC", 50));
         yard.enqueue(new Coach(203, "General", 100));
+        yard.enqueue(new Coach(204, "AC", 60)); // extra for grouping demo
 
         System.out.println("Yard Queue:");
         yard.displayQueue();
 
+        train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
@@ -32,34 +35,49 @@ public class Main {
         train.display();
 
         // ===============================
-        // 🚀 UC7: SORT TRAIN COACHES
+        // UC7: SORT
         // ===============================
 
-        System.out.println("\n--- UC7: Sort Existing Train Coaches ---");
+        System.out.println("\n--- UC7: Sort Coaches ---");
 
-        // Step 1: Convert LinkedList → List
         List<Coach> coachList = train.toList();
 
-        // Step 2: Before sorting
-        System.out.println("\nBefore Sorting:");
-        for (Coach c : coachList) {
-            System.out.println(c);
-        }
-
-        // Step 3: Sort using Comparator (ASC)
         coachList.sort(Comparator.comparingInt(Coach::getCapacity));
 
-        System.out.println("\nAfter Sorting (Ascending Capacity):");
         for (Coach c : coachList) {
             System.out.println(c);
         }
 
-        // Step 4: Sort DESC
-        coachList.sort(Comparator.comparingInt(Coach::getCapacity).reversed());
+        // ===============================
+        // UC8: FILTER
+        // ===============================
 
-        System.out.println("\nAfter Sorting (Descending Capacity):");
-        for (Coach c : coachList) {
+        System.out.println("\n--- UC8: Filter Capacity > 60 ---");
+
+        List<Coach> filtered = coachList.stream()
+                .filter(c -> c.getCapacity() > 60)
+                .collect(Collectors.toList());
+
+        for (Coach c : filtered) {
             System.out.println(c);
+        }
+
+        // ===============================
+        // 🚀 UC9: GROUPING BY TYPE
+        // ===============================
+
+        System.out.println("\n--- UC9: Group Coaches by Type ---");
+
+        Map<String, List<Coach>> grouped = coachList.stream()
+                .collect(Collectors.groupingBy(Coach::getType));
+
+        // Display grouped result
+        for (Map.Entry<String, List<Coach>> entry : grouped.entrySet()) {
+            System.out.println("\nType: " + entry.getKey());
+
+            for (Coach c : entry.getValue()) {
+                System.out.println(c);
+            }
         }
     }
 }
