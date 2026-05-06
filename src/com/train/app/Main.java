@@ -37,35 +37,23 @@ public class Main {
                 List<Coach> coachList = train.toList();
 
                 // ===============================
-                // UC7: SORT
+                // UC7 → UC17 (same as before)
                 // ===============================
                 coachList.sort(Comparator.comparingInt(Coach::getCapacity));
 
-                // ===============================
-                // UC8: FILTER
-                // ===============================
                 List<Coach> filtered = coachList.stream()
                         .filter(c -> c.getCapacity() > 60)
                         .collect(Collectors.toList());
 
-                // ===============================
-                // UC9: GROUPING
-                // ===============================
                 Map<String, List<Coach>> grouped =
                         coachList.stream().collect(Collectors.groupingBy(Coach::getType));
 
-                // ===============================
-                // UC10: REDUCE
-                // ===============================
                 int total = coachList.stream()
                         .map(Coach::getCapacity)
                         .reduce(0, Integer::sum);
 
                 System.out.println("Total Capacity: " + total);
 
-                // ===============================
-                // UC11: REGEX
-                // ===============================
                 Scanner sc = new Scanner(System.in);
 
                 Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
@@ -130,7 +118,6 @@ public class Main {
                 // UC16: BUBBLE SORT
                 // ===============================
                 int[] arr = {72, 50, 100, 60, 40};
-
                 for (int i = 0; i < arr.length - 1; i++) {
                         for (int j = 0; j < arr.length - i - 1; j++) {
                                 if (arr[j] > arr[j + 1]) {
@@ -148,64 +135,72 @@ public class Main {
                 Arrays.sort(bogieTypes);
 
                 // ===============================
-                // UC18: LINEAR SEARCH
+                // 🚀 UC20: DEFENSIVE CHECK
                 // ===============================
-                System.out.println("\n--- UC18: Linear Search ---");
+                System.out.println("\n--- UC20: Defensive Check Before Search ---");
 
-                String[] bogieIDs = {"BG101", "BG202", "BG303", "BG404", "BG505"};
-
-                System.out.print("Enter Bogie ID to search: ");
-                String key = sc.nextLine();
-
-                boolean found = false;
-
-                for (String id : bogieIDs) {
-                        if (id.equals(key)) {
-                                found = true;
-                                break;
+                try {
+                        if (coachList.isEmpty()) {
+                                throw new IllegalStateException("Cannot perform search: Train has no bogies!");
                         }
-                }
 
-                System.out.println(found ? "Bogie ID found ✅" : "Bogie ID not found ❌");
+                        // ===============================
+                        // UC18: LINEAR SEARCH
+                        // ===============================
+                        System.out.println("\n--- UC18: Linear Search ---");
 
-                // ===============================
-                // 🚀 UC19: BINARY SEARCH
-                // ===============================
-                System.out.println("\n--- UC19: Binary Search ---");
+                        String[] bogieIDs = {"BG101", "BG202", "BG303", "BG404", "BG505"};
 
-                // Sorted array (IMPORTANT)
-                String[] sortedIDs = {"BG101", "BG202", "BG303", "BG404", "BG505"};
+                        System.out.print("Enter Bogie ID to search: ");
+                        String key = sc.nextLine();
 
-                System.out.print("Enter Bogie ID to search (Binary): ");
-                String searchKey = sc.nextLine();
+                        boolean found = false;
 
-                int low = 0;
-                int high = sortedIDs.length - 1;
-                boolean foundBinary = false;
-
-                while (low <= high) {
-
-                        int mid = (low + high) / 2;
-
-                        int cmp = sortedIDs[mid].compareTo(searchKey);
-
-                        if (cmp == 0) {
-                                foundBinary = true;
-                                break;
-                        } else if (cmp < 0) {
-                                low = mid + 1;
-                        } else {
-                                high = mid - 1;
+                        for (String id : bogieIDs) {
+                                if (id.equals(key)) {
+                                        found = true;
+                                        break;
+                                }
                         }
+
+                        System.out.println(found ? "Bogie ID found ✅" : "Bogie ID not found ❌");
+
+                        // ===============================
+                        // UC19: BINARY SEARCH
+                        // ===============================
+                        System.out.println("\n--- UC19: Binary Search ---");
+
+                        String[] sortedIDs = {"BG101", "BG202", "BG303", "BG404", "BG505"};
+
+                        System.out.print("Enter Bogie ID to search (Binary): ");
+                        String searchKey = sc.nextLine();
+
+                        int low = 0, high = sortedIDs.length - 1;
+                        boolean foundBinary = false;
+
+                        while (low <= high) {
+                                int mid = (low + high) / 2;
+                                int cmp = sortedIDs[mid].compareTo(searchKey);
+
+                                if (cmp == 0) {
+                                        foundBinary = true;
+                                        break;
+                                } else if (cmp < 0) {
+                                        low = mid + 1;
+                                } else {
+                                        high = mid - 1;
+                                }
+                        }
+
+                        System.out.println(foundBinary
+                                ? "Bogie ID found using Binary Search ✅"
+                                : "Bogie ID not found ❌");
+
+                } catch (IllegalStateException e) {
+                        System.out.println("Error: " + e.getMessage());
                 }
 
-                if (foundBinary) {
-                        System.out.println("Bogie ID found using Binary Search ✅");
-                } else {
-                        System.out.println("Bogie ID not found ❌");
-                }
-
-                System.out.println("\nProgram completed successfully.");
+                System.out.println("\nProgram completed safely.");
                 sc.close();
         }
 }
