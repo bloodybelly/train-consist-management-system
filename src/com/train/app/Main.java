@@ -24,83 +24,63 @@ public class Main {
         yard.enqueue(new Coach(203, "General", 100));
         yard.enqueue(new Coach(204, "AC", 60));
 
-        System.out.println("Yard Queue:");
-        yard.displayQueue();
-
         train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
         train.addCoach(yard.dequeue());
 
-        System.out.println("\nTrain after attaching from yard:");
-        train.display();
-
-        // Convert LinkedList → List
         List<Coach> coachList = train.toList();
 
         // ===============================
-        // UC7: SORT
+        // 🚀 UC13: PERFORMANCE COMPARISON
         // ===============================
-        coachList.sort(Comparator.comparingInt(Coach::getCapacity));
 
-        // ===============================
-        // UC8: FILTER
-        // ===============================
-        List<Coach> filtered = coachList.stream()
+        System.out.println("\n--- UC13: Loop vs Stream Performance ---");
+
+        // Create large dataset (important for meaningful timing)
+        List<Coach> bigList = new ArrayList<>();
+        for (int i = 0; i < 100000; i++) {
+            bigList.add(new Coach(i, "Type" + (i % 3), (i % 100) + 1));
+        }
+
+        // -------------------------------
+        // LOOP-BASED FILTERING
+        // -------------------------------
+        long startLoop = System.nanoTime();
+
+        List<Coach> loopResult = new ArrayList<>();
+        for (Coach c : bigList) {
+            if (c.getCapacity() > 60) {
+                loopResult.add(c);
+            }
+        }
+
+        long endLoop = System.nanoTime();
+        long loopTime = endLoop - startLoop;
+
+        // -------------------------------
+        // STREAM-BASED FILTERING
+        // -------------------------------
+        long startStream = System.nanoTime();
+
+        List<Coach> streamResult = bigList.stream()
                 .filter(c -> c.getCapacity() > 60)
                 .collect(Collectors.toList());
 
-        // ===============================
-        // UC9: GROUPING
-        // ===============================
-        Map<String, List<Coach>> grouped = coachList.stream()
-                .collect(Collectors.groupingBy(Coach::getType));
+        long endStream = System.nanoTime();
+        long streamTime = endStream - startStream;
 
-        // ===============================
-        // UC10: REDUCE
-        // ===============================
-        int totalCapacity = coachList.stream()
-                .map(Coach::getCapacity)
-                .reduce(0, Integer::sum);
+        // -------------------------------
+        // RESULTS
+        // -------------------------------
+        System.out.println("Loop Time (nanoseconds): " + loopTime);
+        System.out.println("Stream Time (nanoseconds): " + streamTime);
 
-        System.out.println("\nTotal Capacity: " + totalCapacity);
-
-        // ===============================
-        // 🚀 UC11: REGEX VALIDATION
-        // ===============================
-
-        Scanner sc = new Scanner(System.in);
-
-        // Patterns
-        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
-        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
-
-        // Input
-        System.out.println("\n--- UC11: Regex Validation ---");
-
-        System.out.print("Enter Train ID (format TRN-1234): ");
-        String trainId = sc.nextLine();
-
-        System.out.print("Enter Cargo Code (format PET-AB): ");
-        String cargoCode = sc.nextLine();
-
-        // Matching
-        Matcher trainMatcher = trainPattern.matcher(trainId);
-        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
-
-        // Validation
-        if (trainMatcher.matches()) {
-            System.out.println("Valid Train ID ✅");
+        // Optional comparison
+        if (loopTime < streamTime) {
+            System.out.println("Loop is faster in this run.");
         } else {
-            System.out.println("Invalid Train ID ❌");
+            System.out.println("Stream is faster in this run.");
         }
-
-        if (cargoMatcher.matches()) {
-            System.out.println("Valid Cargo Code ✅");
-        } else {
-            System.out.println("Invalid Cargo Code ❌");
-        }
-
-        sc.close();
     }
 }
