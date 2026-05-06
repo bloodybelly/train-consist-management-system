@@ -1,5 +1,7 @@
 package com.train.model;
 
+import com.train.exception.InvalidCapacityException;
+
 public class Coach {
 
     private int id;
@@ -8,14 +10,19 @@ public class Coach {
 
     public Coach next; // for LinkedList
 
-    public Coach(int id, String type, int capacity) {
+    // Constructor with validation
+    public Coach(int id, String type, int capacity) throws InvalidCapacityException {
+
+        if (capacity <= 0) {
+            throw new InvalidCapacityException("Capacity must be greater than 0!");
+        }
+
         this.id = id;
         this.type = type;
         this.capacity = capacity;
         this.next = null;
     }
 
-    // Getters (REQUIRED for UC7)
     public int getId() {
         return id;
     }
