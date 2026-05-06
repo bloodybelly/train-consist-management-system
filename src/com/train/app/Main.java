@@ -3,10 +3,9 @@ package com.train.app;
 import com.train.model.Coach;
 import com.train.ds.CoachLinkedList;
 import com.train.ds.CoachQueue;
+import com.train.exception.InvalidCapacityException;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.regex.*;
 
 public class Main {
 
@@ -15,72 +14,29 @@ public class Main {
         CoachLinkedList train = new CoachLinkedList();
         CoachQueue yard = new CoachQueue();
 
-        // ===============================
-        // EXISTING FUNCTIONALITY
-        // ===============================
+        System.out.println("\n--- UC14: Capacity Validation ---");
 
-        yard.enqueue(new Coach(201, "Sleeper", 72));
-        yard.enqueue(new Coach(202, "AC", 50));
-        yard.enqueue(new Coach(203, "General", 100));
-        yard.enqueue(new Coach(204, "AC", 60));
+        try {
+            // VALID coaches
+            yard.enqueue(new Coach(201, "Sleeper", 72));
+            yard.enqueue(new Coach(202, "AC", 50));
 
-        train.addCoach(yard.dequeue());
-        train.addCoach(yard.dequeue());
-        train.addCoach(yard.dequeue());
-        train.addCoach(yard.dequeue());
+            // ❌ INVALID coach (will throw exception)
+            yard.enqueue(new Coach(203, "General", -10));
 
-        List<Coach> coachList = train.toList();
-
-        // ===============================
-        // 🚀 UC13: PERFORMANCE COMPARISON
-        // ===============================
-
-        System.out.println("\n--- UC13: Loop vs Stream Performance ---");
-
-        // Create large dataset (important for meaningful timing)
-        List<Coach> bigList = new ArrayList<>();
-        for (int i = 0; i < 100000; i++) {
-            bigList.add(new Coach(i, "Type" + (i % 3), (i % 100) + 1));
+        } catch (InvalidCapacityException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
-        // -------------------------------
-        // LOOP-BASED FILTERING
-        // -------------------------------
-        long startLoop = System.nanoTime();
+        // Continue program safely
+        System.out.println("\nRemaining valid coaches in yard:");
+        yard.displayQueue();
 
-        List<Coach> loopResult = new ArrayList<>();
-        for (Coach c : bigList) {
-            if (c.getCapacity() > 60) {
-                loopResult.add(c);
-            }
-        }
+        // Add to train
+        train.addCoach(yard.dequeue());
+        train.addCoach(yard.dequeue());
 
-        long endLoop = System.nanoTime();
-        long loopTime = endLoop - startLoop;
-
-        // -------------------------------
-        // STREAM-BASED FILTERING
-        // -------------------------------
-        long startStream = System.nanoTime();
-
-        List<Coach> streamResult = bigList.stream()
-                .filter(c -> c.getCapacity() > 60)
-                .collect(Collectors.toList());
-
-        long endStream = System.nanoTime();
-        long streamTime = endStream - startStream;
-
-        // -------------------------------
-        // RESULTS
-        // -------------------------------
-        System.out.println("Loop Time (nanoseconds): " + loopTime);
-        System.out.println("Stream Time (nanoseconds): " + streamTime);
-
-        // Optional comparison
-        if (loopTime < streamTime) {
-            System.out.println("Loop is faster in this run.");
-        } else {
-            System.out.println("Stream is faster in this run.");
-        }
+        System.out.println("\nTrain:");
+        train.display();
     }
 }
